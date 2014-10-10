@@ -1,17 +1,19 @@
-from tastypie import fields
-from tastypie.resources import ModelResource, Resource, ALL, Bundle
-from tastypie.authentication import ApiKeyAuthentication
-from tastypie.authorization import Authorization
-from tastypie.serializers import Serializer
-from snappybouncer.models import Conversation, UserAccount, Ticket
-from snappybouncer.tasks import send_helpdesk_response
 import logging
 import json
 import re
 import urlparse
 from HTMLParser import HTMLParser
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf.urls import url
+from tastypie import fields
+from tastypie.resources import ModelResource, Resource, ALL, Bundle
+from tastypie.authentication import ApiKeyAuthentication
+from tastypie.authorization import Authorization
+from tastypie.serializers import Serializer
+
+from snappybouncer.models import Conversation, UserAccount, Ticket
+from snappybouncer.tasks import send_helpdesk_response
 
 logger = logging.getLogger(__name__)
 
@@ -187,5 +189,6 @@ class WebhookResource(Resource):
                     send_helpdesk_response.delay(ticket)
                 except ObjectDoesNotExist:
                     logger.error(
-                        'Webhook received for unrecognised support ticket', exc_info=True)
+                        'Webhook received for unrecognised support ticket',
+                        exc_info=True)
         return bundle

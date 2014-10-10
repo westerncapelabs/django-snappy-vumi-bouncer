@@ -5,7 +5,6 @@ from go_http.send import HttpApiSender
 from go_http.contacts import ContactsApiClient
 from besnappy import SnappyApiSender
 
-# import control.settings as settings
 from django.conf import settings
 
 logger = get_task_logger(__name__)
@@ -17,12 +16,12 @@ def send_helpdesk_response(ticket):
     sender = HttpApiSender(
         account_key=settings.VUMI_GO_ACCOUNT_KEY,
         conversation_key=settings.VUMI_GO_CONVERSATION_KEY,
-        conversation_token=settings.VUMI_GO_ACCOUNT_TOKEN
-    )
+        conversation_token=settings.VUMI_GO_ACCOUNT_TOKEN)
     # Send message
     response = sender.send_text(ticket.msisdn, ticket.response)
-    ## TODO: Log outbound send metric
+    # TODO: Log outbound send metric
     return response
+
 
 @task()
 def create_snappy_ticket(ticket):
@@ -34,18 +33,19 @@ def create_snappy_ticket(ticket):
     # Send message
     subject = "Support for %s" % (ticket.msisdn)
     snappy_ticket = snappy_api.note(
-        mailbox_id=settings.SNAPPY_MAILBOX_ID, 
-        subject=subject, 
-        message=ticket.message, 
-        to_addr=None, 
+        mailbox_id=settings.SNAPPY_MAILBOX_ID,
+        subject=subject,
+        message=ticket.message,
+        to_addr=None,
         from_addr=[{"name": ticket.msisdn, "address": settings.SNAPPY_EMAIL}]
     )
     ticket.support_nonce = snappy_ticket
     ticket.save()
     update_snappy_ticket_with_extras.delay(snappy_api, ticket.support_nonce,
                                            ticket.contact_key, subject)
-    ## TODO: Log ticket created metric
+    # TODO: Log ticket created metric
     return True
+
 
 @task()
 def update_snappy_ticket_with_extras(snappy_api, nonce, contact_key, subject):
@@ -56,15 +56,18 @@ def update_snappy_ticket_with_extras(snappy_api, nonce, contact_key, subject):
     for extra in settings.SNAPPY_EXTRAS:
         extra_info += extra + ": " + contact["extra"][extra] + "\n"
     if extra_info != "":
-    # Send private note
-        snappy_ticket = snappy_api.note(
-            mailbox_id=settings.SNAPPY_MAILBOX_ID, 
-            subject=subject, 
-            message=extra_info, 
-            to_addr=[{"name": "Internal Information", "address": settings.SNAPPY_EMAIL}],
+        # Send private note
+        to_addr = [{
+            "name": "Internal Information",
+            "address": settings.SNAPPY_EMAIL,
+        }]
+        snappy_api.note(
+            mailbox_id=settings.SNAPPY_MAILBOX_ID,
+            subject=subject,
+            message=extra_info,
+            to_addr=to_addr,
             id=nonce,
             scope="private",
             staff_id=settings.SNAPPY_STAFF_ID
         )
     return True
-
