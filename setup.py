@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-snappy-vumi-bouncer",
-    version="0.0.1a",
+    version="0.1.0",
     url='https://github.com/westerncapelabs/django-snappy-vumi-bouncer',
     license='BSD',
     description=(
