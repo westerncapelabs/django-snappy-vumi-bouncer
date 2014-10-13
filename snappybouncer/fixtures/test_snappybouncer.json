@@ -1,0 +1,70 @@
+[
+    {
+        "pk": 1,
+        "model": "snappybouncer.useraccount",
+        "fields": {
+            "created_at": "2014-07-24T21:33:29.723Z",
+            "notes": "",
+            "name": "Dummy User Account",
+            "key": "useraccountkey",
+            "updated_at": "2014-07-24T21:33:29.723Z"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "snappybouncer.conversation",
+        "fields": {
+            "user_account": 1,
+            "created_at": "2014-07-24T21:34:03.654Z",
+            "updated_at": "2014-07-24T21:34:03.654Z",
+            "key": "dummyconversation",
+            "notes": "",
+            "name": "Dummy Conversation"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "snappybouncer.ticket",
+        "fields": {
+            "msisdn": "+27001",
+            "created_at": "2014-07-26T20:16:51Z",
+            "support_id": null,
+            "updated_at": "2014-07-26T20:33:03.451Z",
+            "support_nonce": "1fevtx5rzcj5094h",
+            "conversation": 1,
+            "message": "Posted and bounced, not responded",
+            "contact_key": "dummycontactkey",
+            "response": ""
+        }
+    },
+    {
+        "pk": 2,
+        "model": "snappybouncer.ticket",
+        "fields": {
+            "msisdn": "+27001",
+            "created_at": "2014-07-26T20:27:00Z",
+            "support_id": null,
+            "updated_at": "2014-07-26T20:32:45.851Z",
+            "support_nonce": "",
+            "conversation": 1,
+            "message": "Posted, not bounced",
+            "contact_key": "dummycontact1",
+            "response": ""
+        }
+    },
+    {
+        "pk": 3,
+        "model": "snappybouncer.ticket",
+        "fields": {
+            "msisdn": "+27001",
+            "created_at": "2014-07-26T20:30:49Z",
+            "support_id": 383380,
+            "updated_at": "2014-07-26T20:32:24.396Z",
+            "support_nonce": "1fevtx5rzcj6073i",
+            "conversation": 1,
+            "message": "Posted, bounced and responded",
+            "contact_key": "dummycontact1",
+            "response": "Message back from FAQ"
+        }
+    }
+]
