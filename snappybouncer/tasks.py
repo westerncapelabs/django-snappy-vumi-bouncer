@@ -16,7 +16,7 @@ def send_helpdesk_response(ticket):
     sender = HttpApiSender(
         account_key=settings.VUMI_GO_ACCOUNT_KEY,
         conversation_key=settings.VUMI_GO_CONVERSATION_KEY,
-        conversation_token=settings.VUMI_GO_ACCOUNT_TOKEN)
+        conversation_token=settings.VUMI_GO_CONVERSATION_TOKEN)
     # Send message
     response = sender.send_text(ticket.msisdn, ticket.response)
     # TODO: Log outbound send metric

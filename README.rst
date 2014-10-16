@@ -1,11 +1,11 @@
 django-snappy-vumi-bouncer
-==========================
+==============================
 
 A Django app that bounces messages from Vumi to Snappy and back
 
 
 Overview
--------------------------
+------------------------------
 
 ::
 
@@ -42,7 +42,7 @@ be added to ``settings.py`` to configure this app::
     SNAPPY_MAILBOX_ID = 0
     SNAPPY_STAFF_ID = 0
     VUMI_GO_ACCOUNT_KEY = "key"
-    VUMI_GO_ACCOUNT_TOKEN = "token"
+    VUMI_GO_CONVERSATION_TOKEN = "token"
     VUMI_GO_API_TOKEN = "token"
     VUMI_GO_API_URL = "http://go.vumi.org/api/v1/go"
     VUMI_GO_BASE_URL = VUMI_GO_API_URL + "/http_api_nostream"
