@@ -5,37 +5,21 @@ Tests for Snappy Bouncer.
 import json
 
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 from django.core import management
 from tastypie.test import ResourceTestCase
 from tastypie.models import ApiKey
 
-from snappybouncer.models import (
-    Conversation, UserAccount, Ticket, fire_snappy_if_new)
+from snappybouncer.models import Conversation, UserAccount, Ticket
+
+from .helpers import PostSaveHelper
 
 
 class SnappyBouncerResourceTest(ResourceTestCase):
 
-    def _replace_post_save_hooks(self):
-        has_listeners = lambda: post_save.has_listeners(Ticket)
-        assert has_listeners(), (
-            "Ticket model has no post_save listeners. Make sure"
-            " helpers cleaned up properly in earlier tests.")
-        post_save.disconnect(fire_snappy_if_new, sender=Ticket)
-        assert not has_listeners(), (
-            "Ticket model still has post_save listeners. Make sure"
-            " helpers cleaned up properly in earlier tests.")
-
-    def _restore_post_save_hooks(self):
-        has_listeners = lambda: post_save.has_listeners(Ticket)
-        assert not has_listeners(), (
-            "Ticket model still has post_save listeners. Make sure"
-            " helpers removed them properly in earlier tests.")
-        post_save.connect(fire_snappy_if_new, sender=Ticket)
-
     def setUp(self):
         super(SnappyBouncerResourceTest, self).setUp()
-        self._replace_post_save_hooks()
+        self._post_save_helper = PostSaveHelper()
+        self._post_save_helper.replace()
         management.call_command(
             'loaddata', 'test_snappybouncer.json', verbosity=0)
 
@@ -48,7 +32,7 @@ class SnappyBouncerResourceTest(ResourceTestCase):
         self.api_key = self.user.api_key.key
 
     def tearDown(self):
-        self._restore_post_save_hooks()
+        self._post_save_helper.restore()
 
     def get_credentials(self):
         return self.create_apikey(self.username, self.api_key)
