@@ -6,5 +6,5 @@ install:
   - "pip install -r requirements.txt"
   - "pip install -r requirements-dev.txt"
 script:
-  - "py.test --ds=testsettings snappybouncer/tests.py --cov=snappybouncer"
+  - "py.test --ds=testsettings snappybouncer --cov=snappybouncer"
   - "flake8 snappybouncer/"
