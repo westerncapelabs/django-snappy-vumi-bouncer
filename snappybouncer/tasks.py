@@ -49,6 +49,9 @@ def create_snappy_ticket(ticket):
 
 @task()
 def update_snappy_ticket_with_extras(snappy_api, nonce, contact_key, subject):
+    # Short-circuit if there are no extras
+    if not settings.SNAPPY_EXTRAS:
+        return True
     # Gets more extras from Vumi and creates a private note with them
     contacts_api = ContactsApiClient(auth_token=settings.VUMI_GO_API_TOKEN)
     contact = contacts_api.get_contact(contact_key)
